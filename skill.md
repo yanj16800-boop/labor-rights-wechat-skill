@@ -91,7 +91,11 @@ description: |
 4. 免责声明卡片
 5. **延伸阅读（内链）**：关联2-4篇已发布文章，格式 `<a href="链接">标题</a>`
 6. **小程序推荐**：`renderMiniProgram()` 渲染小程序入口按钮
-7. **公众号名片**：`<mp-common-profile>` 标签，引导关注
+7. **公众号名片**：`<mp-common-profile>` 标签，引导关注。完整格式：
+   ```html
+   <section class="mp_profile_iframe_wrp"><mp-common-profile class="custom_select_card mp_profile_iframe mp_common_widget" data-pluginname="mp-common-profile" data-from="0" data-id="MzcwNDM1NjIxOQ==" data-headimg="https://mmbiz.qpic.cn/mmbiz_png/ysL2dia5FLeDou6Xic7kv7JW65sibMNIpIPrWtDnj3gvT1Hhf8UVUmUVNo0KDXM7j4a2EQ92LBSAHA3l17qFsW01qwdeeibbmpccUwsDYSt4kOs/0?wx_fmt=png" data-nickname="云贸星捷人伤赔偿小知识" data-signature="交通事故·工伤赔偿科普｜企业法律咨询（非律师）｜讲标准、流程、证据｜内容仅供参考，不构成法律意见。" data-service_type="1"></mp-common-profile></section>
+   ```
+   注意：`data-id` 用 `__biz` 值（`MzcwNDM1NjIxOQ==`），不是 `gh_` 原始 ID；`data-service_type` 订阅号为 `1`
 
 **不添加文首关注引导**，直接进入正文内容。
 
