@@ -87,7 +87,13 @@
 3. 免责声明；
 4. 延伸阅读：只使用已有公开链接；
 5. 小程序入口；
-6. 公众号名片。
+6. 公众号名片。当前账号使用以下完整组件：
+
+```html
+<section class="mp_profile_iframe_wrp"><mp-common-profile class="custom_select_card mp_profile_iframe mp_common_widget" data-pluginname="mp-common-profile" data-from="0" data-id="MzcwNDM1NjIxOQ==" data-headimg="https://mmbiz.qpic.cn/mmbiz_png/ysL2dia5FLeDou6Xic7kv7JW65sibMNIpIPrWtDnj3gvT1Hhf8UVUmUVNo0KDXM7j4a2EQ92LBSAHA3l17qFsW01qwdeeibbmpccUwsDYSt4kOs/0?wx_fmt=png" data-nickname="云贸星捷人伤赔偿小知识" data-signature="交通事故·工伤赔偿科普｜企业法律咨询（非律师）｜讲标准、流程、证据｜内容仅供参考，不构成法律意见。" data-service_type="1"></mp-common-profile></section>
+```
+
+`data-id` 使用公众号 `__biz` 值，订阅号的 `data-service_type` 为 `1`。
 
 没有公开链接的文章不得伪造内链。草稿箱地址不能作为公开内链。
 
