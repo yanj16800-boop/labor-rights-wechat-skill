@@ -1,6 +1,6 @@
 ---
 name: labor-rights-wechat-layout
-description: 将已完成并通过审核的法律文章排成适合微信公众号手机端阅读的 HTML，并装配已审核的封面图、正文图、延伸阅读和固定文末模块。适用于工伤、交通事故、劳动能力鉴定、人身损害伤残鉴定及相关混合主题。只负责排版与视觉装配，不负责选题、法律研究、正文改写、图片生成、OCR 审核或公众号推送。
+description: Use when 已审核的工伤、交通事故、劳动能力鉴定、人身损害伤残鉴定或混合主题文章需要生成微信公众号手机端 HTML，并装配已审核图片和固定文末模块
 ---
 
 # 法律公众号排版
@@ -31,10 +31,13 @@ description: 将已完成并通过审核的法律文章排成适合微信公众�
 开始前确认输入包至少包含：
 
 - `article_id`
+- `source_body_version`
 - `approved_body`
+- `approved_segments`
 - `article_type`
 - `planned_inline_image_count`
 - `verified_inline_images`
+- `verified_image_urls`
 - `cover_image`
 - `source_list`
 - `related_articles`
@@ -51,16 +54,17 @@ description: 将已完成并通过审核的法律文章排成适合微信公众�
 
 1. 核对正文母版版本和内容审核状态。
 2. 核对封面图、正文图计划数、已审核数和资产引用。
-3. 根据文章内容选择一种主排版模板，必要时少量组合：
+3. 使用 B 模式，根据文章内容选择一种主版式，必要时少量组合：
    - 案例叙事；
    - 实操清单；
    - 问答解释；
    - 对比辨析；
    - 轻量科普。
-4. 按 `references/typesetting_guide.md` 完成手机端排版。
+4. 按 `references/typesetting_guide.md` 直接生成完整微信公众号内联样式 HTML 正文片段，不使用固定模板、主题、表面或密度枚举。
 5. 按 `references/brand_visual_guide.md` 装配图片和品牌模块。
-6. 对照正文母版进行实质内容一致性检查。
-7. 输出排版结果包，交给最终审核员；不得自行推送草稿。
+6. 先登记不可变审核母稿，再把自定义 HTML 和 `verified_image_urls` 交给可信中继；中继必须逐字校验可见文字并生成 `render_id`。
+7. 回读 `render_id` 对应的实际 HTML，对照正文母版进行内容、图片与版本一致性检查。
+8. 输出排版结果包，交给最终审核员；不得自行推送草稿。
 
 ## 硬性规则
 
@@ -71,6 +75,8 @@ description: 将已完成并通过审核的法律文章排成适合微信公众�
 - 正文图不加文字，封面文字按视觉方案执行。
 - 图片数量由文章内容和已审核视觉方案决定，不机械限定为固定张数。
 - 版式必须适合微信公众号手机端，不追求超大图片。
+- HTML 只使用内联样式，不得包含 `<style>`、脚本、事件属性、外链样式、本地路径、NAS 地址或内网地址。
+- 自定义 HTML 的可见文字必须与 `approved_segments` 逐字一致；只允许标签拆分和样式变化。
 - 默认中文输出；只有法规原名、产品名、字段名等确有必要时保留英文。
 
 ## 输出格式
@@ -80,9 +86,14 @@ layout_packet:
   article_id: ""
   source_body_version: ""
   template: ""
+  layout_mode: custom_html
+  content_lock: ""
+  render_id: ""
+  html: ""
   planned_inline_image_count: 0
   verified_inline_image_count: 0
   inline_image_refs: []
+  verified_image_urls: []
   cover_image_ref: ""
   substantive_content_changed: false
   mobile_layout_checked: true
