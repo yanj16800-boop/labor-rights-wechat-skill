@@ -1,124 +1,237 @@
 ---
 name: labor-rights-wechat-layout
-description: Use when 已审核的工伤、交通事故、劳动能力鉴定、人身损害伤残鉴定或混合主题文章需要生成微信公众号手机端 HTML，并装配已审核图片和固定文末模块
+description: |
+  法律维权公众号手机端排版。输入已审核正文，输出完整 HTML。
+  触发词：公众号排版、排版规范、卡片风、排版自检、排版微调、排一下、做排版、生成HTML
 ---
 
 # 法律公众号排版
 
-## 职责边界
+## 职责
 
-输入必须是已经通过内容审核的正文母版和视觉资产包。
+输入已通过内容审核的正文，输出可直接推送到公众号草稿箱的完整 HTML。
 
-本 Skill 可以：
+**可以做**：选模板、拆段落、调标题、编号、卡片、加粗、排图片、装配文末固定模块。
 
-- 选择适合内容的移动端排版模板；
-- 拆分过长段落、调整标题层级、编号、卡片、留白和有限加粗；
-- 安排已审核图片的位置；
-- 装配来源、免责声明、延伸阅读、小程序和公众号名片；
-- 生成可交给发布员的完整 HTML。
+**不可以做**：改事实/法条/金额/判决结论、自行写稿、生图、推送草稿。
 
-本 Skill 不可以：
+## 全局 CSS 变量（按文章类型切换）
 
-- 改变事实、法律观点、法条、金额、期限、案例结论或行动建议；
-- 增删会改变文章含义的正文内容；
-- 自行研究、写作、生图、OCR、审核、备份、推送或删除草稿；
-- 用固定模板强迫正文改变原有叙事逻辑。
+| 类型 | 主色 | 用途 |
+|------|------|------|
+| 工伤赔偿 | `#c24d76` | 工伤认定、赔偿计算 |
+| 交通事故 | `#2f86b7` | 人伤赔偿、事故处理 |
+| 工伤鉴定 | `#18a96f` | 伤残等级、劳动能力 |
+| 事故责任 | `#b33f69` | 责任划分、维权流程 |
+| 伤残鉴定 | `#8b6fd6` | 伤残评定、赔偿标准 |
 
-如果排版需要实质修改正文，返回写手修改，修改后的正文必须重新经过法律审核。不得由排版环节直接改写。
+以下模板中用 `--accent` 代表主色，实际输出时替换为对应类型的值。
 
-## 输入要求
+## 样式配方（生产级 CSS）
 
-开始前确认输入包至少包含：
+### 外层宣纸纹容器（每篇文章唯一）
 
-- `article_id`
-- `source_body_version`
-- `approved_body`
-- `approved_segments`
-- `article_type`
-- `planned_inline_image_count`
-- `verified_inline_images`
-- `verified_image_urls`
-- `cover_image`
-- `source_list`
-- `related_articles`
-
-图片完整性按以下规则判断：
-
-- `planned_inline_image_count > 0` 时，`verified_inline_images` 数量必须与计划一致；
-- 每张正文图必须有可用地址或资产引用，并已通过真实图片 OCR 与视觉审核；
-- `planned_inline_image_count = 0` 只有在视觉方案明确判定“不需要正文图”时才有效；
-- 图片为 `partial`、缺少引用、审核状态不明或数量不一致时，立即退回配图员，不得继续排版；
-- 不得把封面图冒充正文图，也不得用占位符通过检查。
-
-## 执行流程
-
-1. 核对正文母版版本和内容审核状态。
-2. 核对封面图、正文图计划数、已审核数和资产引用。
-3. 使用 B 模式，根据文章内容选择一种主版式，必要时少量组合：
-   - 案例叙事；
-   - 实操清单；
-   - 问答解释；
-   - 对比辨析；
-   - 轻量科普。
-4. 按 `references/typesetting_guide.md` 直接生成完整微信公众号内联样式 HTML 正文片段，不使用固定模板、主题、表面或密度枚举。
-5. 按 `references/brand_visual_guide.md` 装配图片和品牌模块。
-6. 先登记不可变审核母稿，再把自定义 HTML 和 `verified_image_urls` 交给可信中继；中继必须逐字校验可见文字并生成 `render_id`。
-7. 回读 `render_id` 对应的实际 HTML，对照正文母版进行内容、图片与版本一致性检查。
-8. 输出排版结果包，交给最终审核员；不得自行推送草稿。
-
-## 硬性规则
-
-- 直接进入正文，不添加文首关注引导。
-- 不使用 `---` 或 `<hr>` 分割线，章节通过卡片和间距区分。
-- 每段通常不超过 3 句；拆段不得改变语义。
-- 加粗只用于标题、法律结论、判决要点和关键法律要件。
-- 正文图不加文字，封面文字按视觉方案执行。
-- 图片数量由文章内容和已审核视觉方案决定，不机械限定为固定张数。
-- 版式必须适合微信公众号手机端，不追求超大图片。
-- HTML 只使用内联样式，不得包含 `<style>`、脚本、事件属性、外链样式、本地路径、NAS 地址或内网地址。
-- 自定义 HTML 的可见文字必须与 `approved_segments` 逐字一致；正文图片的顺序和数量必须与 `verified_image_urls` 完全一致。
-- 默认中文输出；只有法规原名、产品名、字段名等确有必要时保留英文。
-
-## 输出格式
-
-```yaml
-layout_packet:
-  article_id: ""
-  source_body_version: ""
-  template: ""
-  layout_mode: custom_html
-  content_lock: ""
-  render_id: ""
-  html: ""
-  planned_inline_image_count: 0
-  verified_inline_image_count: 0
-  inline_image_refs: []
-  verified_image_urls: []
-  cover_image_ref: ""
-  substantive_content_changed: false
-  mobile_layout_checked: true
-  status: ready_for_final_review
-  return_to: ""
-  error:
-    stage: ""
-    category: ""
-    actual_message: ""
+```html
+<section class="paper-bg" style="padding:10px 8px;background-color:#f5f0e6;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 8px,rgba(180,160,130,0.02) 8px,rgba(180,160,130,0.02) 10px),repeating-linear-gradient(45deg,transparent 0,transparent 12px,rgba(180,160,130,0.015) 12px,rgba(180,160,130,0.015) 14px);">
+  <!-- 所有内容放在这个 section 内 -->
+</section>
 ```
 
-只有以下条件全部满足时，`status` 才能是 `ready_for_final_review`：
+用纯 CSS `repeating-linear-gradient` 模拟宣纸纹理，不依赖外部图片。
 
-- 正文母版未被实质改写；
-- 正文图片计划数、审核通过数和引用数完全一致；
-- 封面和所有正文图均可读取；
-- 移动端排版自检通过；
-- 固定文末模块完整。
+### 卡片容器（章节主卡片）
 
-否则输出实际错误并设置 `return_to`：
+```html
+<section style="padding:14px 12px;margin-bottom:10px;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-radius:12px;border:1px solid #ebe0cc;box-shadow:0 1px 4px rgba(120,100,70,.08);">
+  <!-- 卡片内容 -->
+</section>
+```
 
-- 正文需要实质修改：`law-writer`
-- 图片缺失或不合格：`law-visual`
-- 法律或事实疑点：`law-reviewer`
+### 正文段落
 
-## 规则优先级
+```html
+<p style="font-family:-apple-system,sans-serif;font-size:15px;color:#4a3f30;line-height:1.8;text-align:justify;margin:0 0 0.6em 0;">段落文字</p>
+```
 
-本文件是唯一主规则。参考文件只提供排版和视觉细节；如与本文件冲突，以本文件为准。
+末段用 `margin:0` 避免底部多余间距。
+
+### 纯文字区（不需卡片包裹的过渡段）
+
+```html
+<section style="margin-bottom:10px;">
+  <p style="...(同上)">文字</p>
+</section>
+```
+
+### 章节标题
+
+```html
+<h3 style="font-family:-apple-system,sans-serif;font-size:17px;color:--accent;line-height:1.8;margin:0 0 4px 0;font-weight:bold;">标题文字</h3>
+```
+
+`--accent` 替换为文章类型对应的主色。
+
+### 法条引用卡片
+
+```html
+<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-left:4px solid --accent;border-radius:0 8px 8px 0;">
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.8;margin:0;">
+    <strong>《法条名称》第X条：</strong>法条原文中<strong>关键内容</strong>加粗标注。
+  </p>
+</section>
+```
+
+### 法条速查表格
+
+```html
+<section style="...卡片容器样式...">
+  <h3 style="...(标题样式)...">关键法条速查</h3>
+  <table style="border-collapse:collapse;width:100%;margin:5px 0;font-size:14px;color:#4a3f30;">
+    <tr style="font-family:-apple-system,sans-serif;background:#f5eee0;">
+      <td style="font-family:-apple-system,sans-serif;padding:8px 10px;border:1px solid #ebe0cc;font-weight:bold;">列头1</td>
+      <td style="font-family:-apple-system,sans-serif;padding:8px 10px;border:1px solid #ebe0cc;font-weight:bold;">列头2</td>
+    </tr>
+    <tr><td style="font-family:-apple-system,sans-serif;padding:8px 10px;border:1px solid #ebe0cc;">内容</td><td style="...(同上)...">内容</td></tr>
+    <tr style="background:#faf8f3;"><td style="...">内容</td><td style="...">内容</td></tr>
+  </table>
+</section>
+```
+
+表格行交替 `background:#faf8f3` 做斑马纹。
+
+### 警示提示卡片（橙黄色左边框）
+
+```html
+<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border-left:4px solid #e8943a;border-radius:0 8px 8px 0;">
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#7a5a1b;line-height:1.8;margin:0;">
+    ⚠️ 警示内容...
+  </p>
+</section>
+```
+
+### 知识提示卡片（绿色左边框）
+
+```html
+<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border-left:4px solid #18a96f;border-radius:0 8px 8px 0;">
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#3a5a28;line-height:1.8;margin:0;">
+    💡 提示内容...
+  </p>
+</section>
+```
+
+### 居中强调短句
+
+```html
+<section style="padding:14px 12px;margin-bottom:10px;background-color:#faf8f3;background-image:...(宣纸纹);border-radius:12px;border:1px solid #ebe0cc;text-align:center;">
+  <p style="font-family:-apple-system,sans-serif;font-size:15px;color:--accent;line-height:1.8;margin:0;font-weight:bold;">强调短句</p>
+</section>
+```
+
+### 配图
+
+```html
+<section style="margin-bottom:10px;">
+  <img data-src="图片URL/640?from=appmsg" style="display:block;width:100%;height:auto;border-radius:12px;">
+</section>
+```
+
+配图用 `data-src` 不要 `src`，URL 必须带 `/640?from=appmsg` 后缀。
+
+### 步骤列表（流程排版）
+
+```html
+<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border:1px solid #ebe0cc;border-radius:8px;">
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.8;margin:0;">
+    ✓ 步骤一<br>
+    <span style="font-family:-apple-system,sans-serif;color:#888;font-size:13px;">补充说明</span><br>
+    ✓ 步骤二<br>
+    ✓ 步骤三
+  </p>
+</section>
+```
+
+## 文末固定模块（每篇必加，顺序不可变）
+
+### 1. 来源标注
+
+```html
+<section style="padding:5px 10px;margin:5px 0;text-align:center;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+    来源：本文梳理自《XXX法》、《XXX条例》及相关司法解释现行有效版本。内容仅供信息参考。
+  </p>
+</section>
+```
+
+### 2. 免责声明卡片
+
+```html
+<section style="padding:10px 12px;margin:5px 0;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-radius:12px;border:1px solid #ebe0cc;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+    <strong>免责声明：</strong>本文仅供信息参考，不构成法律意见。每起XX情况不同，具体处理请以法律规定和实际情况为准。
+  </p>
+</section>
+```
+
+### 3. 公众号名片
+
+```html
+<section style="margin:5px 0;">
+  <section class="mp_profile_iframe_wrp"><mp-common-profile class="custom_select_card mp_profile_iframe mp_common_widget" data-pluginname="mp-common-profile" data-from="0" data-id="MzcwNDM1NjIxOQ==" data-headimg="https://mmbiz.qpic.cn/mmbiz_png/ysL2dia5FLeDou6Xic7kv7JW65sibMNIpIPrWtDnj3gvT1Hhf8UVUmUVNo0KDXM7j4a2EQ92LBSAHA3l17qFsW01qwdeeibbmpccUwsDYSt4kOs/0?wx_fmt=png" data-nickname="云贸星捷人伤赔偿小知识" data-signature="交通事故·工伤赔偿科普｜企业法律咨询（非律师）｜讲标准、流程、证据｜内容仅供参考，不构成法律意见。" data-service_type="1"></mp-common-profile></section>
+</section>
+```
+
+`data-id` 是 `__biz` 值，`data-service_type` 订阅号为 `1`。
+
+## 排版规则
+
+### 段落
+
+- 每段 ≤ 3 句，超长必须拆分
+- 段落间 `margin:0 0 0.6em 0`（末段 `margin:0`）
+- 复杂流程拆成编号步骤
+
+### 加粗
+
+**可以**：章节标题、法律结论、判决要点、关键法律要件、法条编号
+**不可以**：普通描述文字、情感表达、过渡句、整段加粗
+
+### 编号系统
+
+| 场景 | 格式 | 示例 |
+|------|------|------|
+| 法规解读分项 | 01/02/03 | **01 医疗费** |
+| 维权步骤 | 1. 2. 3. | **第一步，保留证据。** |
+| 避坑提醒 | 圆圈数字 | ① 别听信口头忽悠 |
+| 列举要点 | 短横线 | - 医疗费 - 伙食补助 |
+
+同一篇不混用编号格式。
+
+### 法条引用
+
+- 法条原文用引用卡片（左边框4px solid --accent）
+- 法规名用《》，精确到条、款、项
+- 关键内容加粗，后跟大白话解读
+- 不连续堆砌 3 条以上
+
+### 配图
+
+- 案例型：案情后1张 + 判决后1张 + 结尾前1张（可选）
+- 法规型：总述后1张 + 分项中1张 + 结尾前1张（可选）
+- 科普型：概念后1张 + 分级后1张
+- 问答型：开头1张 + 结尾前1张
+- 封面比例 2.35:1，正文配图 16:9 横图
+- 每篇 2-3 张，不超 3 张
+- 图片 URL 必须完整（`/640?from=appmsg`）
+
+## 排版自检清单
+
+- 每段 ≤ 3 句？
+- 加粗只用在标题/结论/判决要点？
+- 编号格式统一？
+- 法条用了引用卡片格式（左边框）？
+- 配图位置标记正确？
+- 没有文首关注引导？
+- 文末固定模块齐全（来源+免责+名片）？
+- 卡片间距均匀（`margin-bottom:10px`）？
+- 宣纸纹背景生效？
+- `--accent` 主色与文章类型匹配？
