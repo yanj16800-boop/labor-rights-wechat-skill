@@ -182,6 +182,29 @@ description: |
 
 `data-id` 是 `__biz` 值，`data-service_type` 订阅号为 `1`。
 
+### 4. 延伸阅读区（草稿阶段就写，数量不限）
+
+**规则（2026-08-02 修订）：**
+
+- **草稿阶段就写延伸阅读**，不用等发布
+- **数量不限**：有相关的就加，无硬性上限
+- **关联判定（放宽）**：同领域 / 同系列 / 同法条 / 同赔偿项目 / 同人群 / 互相补充说明，沾边即加
+- **草稿格式**（无有效 URL，纯文字标题列表）：
+
+```html
+<section style="padding:12px 12px;margin:12px 0 4px;background-color:#faf8f3;border-radius:12px;border:1px solid #ebe0cc;">
+  <h3 style="font-family:-apple-system,sans-serif;font-size:15px;color:#8a7a5a;line-height:1.8;margin:0 0 6px 0;font-weight:bold;">延伸阅读</h3>
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.9;margin:0;">
+    《高温中暑算不算工伤？实操指南》<br>
+    《十级工伤赔偿明细，一次性讲清》<br>
+    《公司给少缴了工伤保险，差额谁补？》
+  </p>
+</section>
+```
+
+- **发布后格式**（补 URL，手动在微信编辑器加超链接）：`<a href="已发布文章链接">文章标题</a>`，一行一条
+- 同系列未发布篇也可列入（标注「待发布」），发布顺序上优先发被引用篇
+
 ## 排版规则
 
 ### 段落
