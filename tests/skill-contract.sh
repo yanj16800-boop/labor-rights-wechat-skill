@@ -12,9 +12,9 @@ test "$(shasum -a 256 "$asset" | awk '{print $1}')" = "$expected_hash"
 test -f "$wechat_asset"
 test "$(shasum -a 256 "$wechat_asset" | awk '{print $1}')" = "$wechat_hash"
 test "$(stat -f '%z' "$wechat_asset")" -lt 2097152
-grep -Fq "background-image:url('https://mmbiz.qpic.cn/" "$skill_dir/SKILL.md"
-grep -Fq 'background-repeat:repeat-y' "$skill_dir/SKILL.md"
-grep -Fq 'background-size:100% auto' "$skill_dir/SKILL.md"
-grep -Fq 'box-shadow:inset 0 0 0.15mm rgba(88,88,88,.32)' "$skill_dir/SKILL.md"
+grep -Fq '/640?from=appmsg&quot;);background-size:cover' "$skill_dir/SKILL.md"
+grep -Fq 'background-blend-mode:multiply' "$skill_dir/SKILL.md"
+grep -Fq '宣纸只用于重点模块' "$skill_dir/SKILL.md"
+grep -Fq 'box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55)' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
