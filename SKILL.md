@@ -32,7 +32,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 整篇文章必须使用一个全文外框。外框使用白底、细实线边框，并在框内侧形成宽度固定为 `1.5mm` 的向内渐变灰边；不能把这条内渐变灰边拆散到各章节卡片，也不能用普通外阴影代替。
 
 ```html
-<section class="article-shell" style="font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;padding:10px 8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
+<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:10px 8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
   <!-- 所有内容放在这个 section 内 -->
 </section>
 ```
@@ -271,6 +271,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 - 每段 ≤ 3 句？
 - 全文是否只有一个 `article-shell` 外框，并包含 `box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45)`？
+- `article-shell` 是否包含 `width:100%;max-width:100%;box-sizing:border-box;overflow:hidden`，并在 375px、414px 均无横向溢出？
 - 加粗只用在标题/结论/判决要点？
 - 编号格式统一？
 - 法条用了引用卡片格式（左边框）？

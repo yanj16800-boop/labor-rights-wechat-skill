@@ -36,6 +36,8 @@ grep -Fq '414px' "$skill_dir/SKILL.md"
 grep -Fq '微信草稿回读' "$skill_dir/SKILL.md"
 grep -Fq 'published_url' "$skill_dir/SKILL.md"
 grep -Fq '可点击的 `《文章标题》`' "$skill_dir/SKILL.md"
+grep -Fq 'width:100%;max-width:100%;box-sizing:border-box;overflow:hidden' "$skill_dir/SKILL.md"
+grep -Fq '横向溢出' "$skill_dir/SKILL.md"
 ! grep -Fq '不加整篇内框' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
