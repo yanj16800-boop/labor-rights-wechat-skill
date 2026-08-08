@@ -20,5 +20,10 @@ grep -Fq '不得见到章节标题就新开一张卡片' "$skill_dir/SKILL.md"
 grep -Fq '短篇轻量科普通常只使用 2—3 张正文主卡片' "$skill_dir/SKILL.md"
 grep -Fq '核心结论、规则依据、误区提醒、行动步骤' "$skill_dir/SKILL.md"
 grep -Fq '存在三个以上不同类型的重点时，不得只使用一次宣纸' "$skill_dir/SKILL.md"
+grep -Fq '整篇文章必须使用一个全文外框' "$skill_dir/SKILL.md"
+grep -Fq 'class="article-shell"' "$skill_dir/SKILL.md"
+grep -Fq 'box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45)' "$skill_dir/SKILL.md"
+grep -Fq '全文外框的 1.5mm 内渐变灰边' "$skill_dir/references/typesetting_guide.md"
+! grep -Fq '不加整篇内框' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
