@@ -16,5 +16,9 @@ grep -Fq '/640?from=appmsg&quot;);background-size:cover' "$skill_dir/SKILL.md"
 grep -Fq 'background-blend-mode:multiply' "$skill_dir/SKILL.md"
 grep -Fq '宣纸只用于重点模块' "$skill_dir/SKILL.md"
 grep -Fq 'box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55)' "$skill_dir/SKILL.md"
+grep -Fq '不得见到章节标题就新开一张卡片' "$skill_dir/SKILL.md"
+grep -Fq '短篇轻量科普通常只使用 2—3 张正文主卡片' "$skill_dir/SKILL.md"
+grep -Fq '核心结论、规则依据、误区提醒、行动步骤' "$skill_dir/SKILL.md"
+grep -Fq '存在三个以上不同类型的重点时，不得只使用一次宣纸' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
