@@ -4,6 +4,8 @@
 
 ## 核心特性
 
+- 使用 `assets/xuan-paper.png` 真实宣纸纹理，最终 HTML 引用同一公众号的微信 CDN 地址；
+- 整篇外框内边带 `0.15mm` 向内渐隐灰边；
 - 多种移动端排版模板按内容自动选择；
 - 已审核正文母版不得被排版环节实质改写；
 - 正文图片计划数、审核数和实际引用数必须一致；
@@ -15,6 +17,9 @@
 
 ```
 ├── SKILL.md                          # 唯一主规则
+├── assets/
+│   ├── xuan-paper.png                # 固定宣纸背景原图
+│   └── xuan-paper-wechat.jpg         # 同尺寸微信上传版（小于 2MB）
 └── references/
     ├── typesetting_guide.md           # 完整排版规范
     └── brand_visual_guide.md          # 品牌视觉指南（配色、配图风格、封面prompt）

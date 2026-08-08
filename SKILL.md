@@ -1,8 +1,6 @@
 ---
 name: labor-rights-wechat-layout
-description: |
-  法律维权公众号手机端排版。输入已审核正文，输出完整 HTML。
-  触发词：公众号排版、排版规范、卡片风、排版自检、排版微调、排一下、做排版、生成HTML
+description: Use when 已审核的法律公众号正文需要手机端排版、排版自检、生成 HTML 或修复草稿箱与 Obsidian 预览样式不一致
 ---
 
 # 法律公众号排版
@@ -31,13 +29,21 @@ description: |
 
 ### 外层宣纸纹容器（每篇文章唯一）
 
+固定素材：`assets/xuan-paper.png` 是原始母版；`assets/xuan-paper-wechat.jpg` 是同尺寸、低于微信 2MB 限制的上传版。不得改成纯色或 CSS 模拟纹理。
+
+当前公众号已验证的微信 CDN URL：
+
+`https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/0?from=appmsg`
+
+直接复用该地址。仅当地址失效或切换公众号时，才用正文图片上传能力重新上传 `xuan-paper-wechat.jpg`；无法取得有效 URL 时停止排版并报告，不能回退到渐变模拟。
+
 ```html
-<section class="paper-bg" style="padding:10px 8px;background-color:#f5f0e6;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 8px,rgba(180,160,130,0.02) 8px,rgba(180,160,130,0.02) 10px),repeating-linear-gradient(45deg,transparent 0,transparent 12px,rgba(180,160,130,0.015) 12px,rgba(180,160,130,0.015) 14px);">
+<section class="paper-bg" data-paper-asset-sha256="18b9bc813a461cff51d537004b3d1801d961b5b7247d391981776202d74295df" style="padding:10px 8px;background-color:#f5f0e6;background-image:url('https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/0?from=appmsg');background-repeat:repeat-y;background-position:top center;background-size:100% auto;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.32);">
   <!-- 所有内容放在这个 section 内 -->
 </section>
 ```
 
-用纯 CSS `repeating-linear-gradient` 模拟宣纸纹理，不依赖外部图片。
+`box-shadow` 是整篇外框内边向内渐隐的灰色边缘，宽度固定 `0.15mm`；不得删除、加宽或改成外阴影。Obsidian 预览和公众号草稿必须读取同一份 `final.html`。
 
 ### 卡片容器（章节主卡片）
 
@@ -256,5 +262,7 @@ description: |
 - 没有文首关注引导？
 - 文末固定模块齐全（来源+免责+名片）？
 - 卡片间距均匀（`margin-bottom:10px`）？
-- 宣纸纹背景生效？
+- 外层唯一 `paper-bg` 使用 `assets/xuan-paper-wechat.jpg` 对应的微信 CDN URL？
+- 上传版 SHA-256 是 `18b9bc813a461cff51d537004b3d1801d961b5b7247d391981776202d74295df`，且原始 PNG 仍完整保留？
+- 整篇外框包含 `box-shadow:inset 0 0 0.15mm rgba(88,88,88,.32)`？
 - `--accent` 主色与文章类型匹配？
