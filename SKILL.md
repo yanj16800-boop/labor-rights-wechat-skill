@@ -32,18 +32,41 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 整篇文章必须使用一个全文外框。外框使用白底、细实线边框，并在框内侧形成宽度固定为 `1.5mm` 的向内渐变灰边；不能把这条内渐变灰边拆散到各章节卡片，也不能用普通外阴影代替。
 
 ```html
-<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:4px 8px 8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
+<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
   <!-- 所有内容放在这个 section 内 -->
 </section>
 ```
 
 全文外框只承担整体收束和内渐变灰边，不铺宣纸。宣纸仍只用于下述重点模块。Obsidian 预览和公众号草稿必须读取包含该 `article-shell` 的同一份 `final.html`。
 
+全文外框四边内距统一为 `8px`，确保第一个内框顶部距离与左右距离一致；不得再为顶部单独使用 `4px`。
+
 公众号主标题由草稿的 `title` 字段承载，正文不得重复输出主标题或 `<h1>`。Obsidian 预览应在正文外单独展示标题元数据，不能把标题写入 `article-shell`。
 
 ### 重点宣纸模块
 
 只用于关键法条、核心结论、关键步骤或避坑提醒。普通正文、整篇外层和每个章节都不得铺宣纸。
+
+所有 `paper-highlight` 一律不使用左侧粗线。宣纸的识别只依靠真实纹理、圆角和 `0.15mm` 向内灰边；章节标题的 `3px` 竖线和警示卡的独立竖线不属于宣纸。法条使用宣纸时同样不得加 `border-left`。
+
+### 写手—排版协作预审
+
+排版 Agent 在配图前先读取 `article.md`、`visual-brief.md`、内容审核和法律审核，核对写手标注的精确原文位置、候选文字、读者问题、实际影响和信息结构。排版不得脱离候选表临时猜重点，也不得用视觉模块掩盖正文重复或核心答案缺失。
+
+预审写入最新版 `reviews/highlight-map-vN.md`，Frontmatter 至少包含：
+
+```yaml
+review_type: highlight_map
+version: N
+input_sha256: "当前 article.md 的 SHA-256"
+decision: ready_for_visual | revise_writer
+reviewed_at: "ISO 8601 时间"
+reviewer: layout-agent
+```
+
+正文包含逐项采用或放弃理由、锁定形式、精确原文位置和最终落位。候选不重要、彼此重复、缺少文章核心答案、信息图文案无法独立读懂或整版节奏明显失衡时，返回 `revise_writer` 并退回写手；排版 Agent 不得代写正文。只有 `ready_for_visual` 才交配图 Agent。
+
+完成排版后，写手必须读取同一 `final.html` 的 375px、414px 预览并写入 `reviews/writer-layout-readback-vN.md`，确认重点层次、整版内容质量和图文关系；不通过时退回对应环节。
 
 排版前读取 `visual-brief.md` 和两轮审核结论，从四类候选中取舍：**核心结论、规则依据、误区提醒、行动步骤**。每个候选必须标注类型、原文范围、读者价值和落位位置。评分：直接影响判断或行动 `+3`，核心规则 `+2`，常见误区 `+2`，可独立读懂 `+1`；重复相邻文字 `-3`，与图片重复 `-3`，超过120个汉字 `-2`。分数用于比较，不机械决定数量；通常保留 2—4 处，存在三个以上不同类型的重点时，不得只使用一次宣纸。
 
@@ -53,7 +76,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 宣纸重点原则上嵌入对应主卡片内部，紧跟相关标题、法条或解释，形成“规则/结论 → 大白话解释”的连续阅读单元。不得制作独立的口号式宣纸横幅，也不得用脱离上下文的一句话把两张主卡片隔开。仅在全文末尾的行动收束或独立风险警示确有必要时，允许单独使用一次宣纸模块。
 
-排版终审写入 `reviews/highlight-map-vN.md`，逐项记录原文位置、分数、表现形式、采用或放弃理由、最终位置。用同一份 `final.html` 检查 Obsidian `375px`、`414px` 预览及微信草稿回读；任何一端出现素材被清洗、重点错位、重复或过密，均退回排版修正。
+排版终审更新同版本重点落位并记录原文位置、分数、表现形式、采用或放弃理由、最终位置。用同一份 `final.html` 检查 Obsidian `375px`、`414px` 预览及微信草稿回读；任何一端出现素材被清洗、重点错位、重复或过密，均退回排版修正。
 
 固定素材：`assets/xuan-paper.png` 是原始母版；`assets/xuan-paper-wechat.jpg` 是低于微信 2MB 限制的上传版。
 
@@ -109,7 +132,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 `--accent` 替换为文章类型对应的主色。
 
-### 法条引用卡片
+### 法条引用卡片（宣纸，无左竖线）
 
 ```html
 <section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
@@ -268,7 +291,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 ### 法条引用
 
-- 法条原文用引用卡片（左边框4px solid --accent）
+- 法条原文可用宣纸引用卡片，但不得增加左侧粗线；章节标题负责提供视觉锚点
 - 法规名用《》，精确到条、款、项
 - 关键内容加粗，后跟大白话解读
 - 不连续堆砌 3 条以上
@@ -305,6 +328,10 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 - 存在三个以上不同类型重点时，宣纸是否不止使用一次？
 - 重点模块使用 `/640?from=appmsg` 的真实宣纸地址和 `background-blend-mode:multiply`？
 - 重点模块包含 `box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55)`？
+- 所有 `paper-highlight` 是否均无 `border-left`，竖线只出现在章节标题或独立警示卡？
+- `article-shell` 是否为四边 `padding:8px`，第一个内框顶部距离与左右一致？
+- 是否先完成写手—排版预审，且最新 `highlight-map` 为 `ready_for_visual`？
+- 写手是否完成 `writer-layout-readback-vN.md` 的整版复核？
 - 是否生成 `reviews/highlight-map-vN.md` 并记录采用、放弃和最终位置？
 - 是否完成同一 `final.html` 的 375px、414px 预览和微信草稿回读？
 - `--accent` 主色与文章类型匹配？
