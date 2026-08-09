@@ -32,7 +32,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 整篇文章必须使用一个全文外框。外框使用白底、细实线边框，并在框内侧形成宽度固定为 `1.5mm` 的向内渐变灰边；不能把这条内渐变灰边拆散到各章节卡片，也不能用普通外阴影代替。
 
 ```html
-<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:10px 8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
+<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:4px 8px 8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
   <!-- 所有内容放在这个 section 内 -->
 </section>
 ```
@@ -45,7 +45,9 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 只用于关键法条、核心结论、关键步骤或避坑提醒。普通正文、整篇外层和每个章节都不得铺宣纸。
 
-排版前读取 `visual-brief.md` 和两轮审核结论，从四类候选中取舍：**核心结论、规则依据、误区提醒、行动步骤**。评分：直接影响判断或行动 `+3`，核心规则 `+2`，常见误区 `+2`，可独立读懂 `+1`；重复相邻文字 `-3`，与图片重复 `-3`，超过90个汉字 `-2`。分数用于比较，不机械决定数量；通常保留 2—4 处，存在三个以上不同类型的重点时，不得只使用一次宣纸。
+排版前读取 `visual-brief.md` 和两轮审核结论，从四类候选中取舍：**核心结论、规则依据、误区提醒、行动步骤**。每个候选必须标注类型、原文范围、读者价值和落位位置。评分：直接影响判断或行动 `+3`，核心规则 `+2`，常见误区 `+2`，可独立读懂 `+1`；重复相邻文字 `-3`，与图片重复 `-3`，超过120个汉字 `-2`。分数用于比较，不机械决定数量；通常保留 2—4 处，存在三个以上不同类型的重点时，不得只使用一次宣纸。
+
+宣纸承载一个完整重点语义块，不是被截出来的一句话。单纯法条摘录不自动成为重点；必须与大白话结论或实际影响组合。每个模块应包含“结论 + 影响/行动”，可以使用两段短文或 2—4 个短项，建议为 40—120 个汉字，不得只放一句口号。内容审核核对重点是否真正重要，法律审核核对是否改变法律原意，排版只负责落位，不重新创造重点。
 
 步骤、比较、材料清单和条件组合优先短文字信息图；核心规则、关键结论、关键误区和行动收束优先宣纸；其他内容保持正文或普通配图。开头两段原则上不放宣纸，同一主题主卡片通常不超过一处，宣纸不得与信息图重复，不得连续出现两个宣纸模块。宣纸只能提炼已审核内容，不得新增事实、法条或结论。
 
@@ -62,7 +64,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 直接复用该地址及以下写法。`/640?from=appmsg`、`background` 简写、`background-size:cover` 和 `background-blend-mode:multiply` 均来自已发布文章《十级工伤赔偿明细，一次性讲清》的可用排版，不改成全篇背景。
 
 ```html
-<section class="paper-highlight" style="margin:0 0 10px;padding:12px 14px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
   重点内容
 </section>
 ```
@@ -73,10 +75,10 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 卡片按“完整阅读单元”组织，不按标题机械切分。一张主卡片可以容纳 2—3 个相互关联的短章节；不得见到章节标题就新开一张卡片。短篇轻量科普通常只使用 2—3 张正文主卡片，图片和文末固定模块不计入；较长文章才按信息量增加卡片。
 
-单独一张主卡片原则上应至少包含两个实质段落，或一个标题加一个完整的重点/清单模块。只有需要单独停留的核心结论才能例外。相邻内容能自然连续阅读时，优先放在同一卡片内，用标题和 10px 段间距区分。
+单独一张主卡片原则上应至少包含两个实质段落，或一个标题加一个完整的重点/清单模块。只有需要单独停留的核心结论才能例外。相邻内容能自然连续阅读时，优先放在同一卡片内，用标题和紧凑段间距区分。
 
 ```html
-<section style="margin:0 0 10px;padding:20px 18px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(120,100,70,.08);border:1px solid #ebe0cc;">
+<section style="margin:0 0 8px;padding:12px 14px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(120,100,70,.08);border:1px solid #ebe0cc;">
   <!-- 卡片内容 -->
 </section>
 ```
@@ -84,7 +86,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 正文段落
 
 ```html
-<p style="font-family:-apple-system,sans-serif;font-size:16px;color:#4a3f30;line-height:1.85;text-align:left;text-indent:2em;margin:0 0 10px 0;">段落文字</p>
+<p style="font-family:-apple-system,sans-serif;font-size:16px;color:#4a3f30;line-height:1.85;text-align:left;text-indent:2em;margin:0 0 .45em 0;">段落文字</p>
 ```
 
 末段用 `margin:0` 避免底部多余间距。
@@ -94,7 +96,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 纯文字区（不需卡片包裹的过渡段）
 
 ```html
-<section style="margin-bottom:10px;">
+<section style="margin-bottom:8px;">
   <p style="...(同上)">文字</p>
 </section>
 ```
@@ -102,7 +104,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 章节标题
 
 ```html
-<h3 style="font-family:-apple-system,sans-serif;margin:0 0 12px;font-size:18px;color:#3a2a30;border-left:3px solid --accent;padding-left:10px;font-weight:700;">标题文字</h3>
+<h3 style="font-family:-apple-system,sans-serif;margin:0 0 6px;font-size:18px;color:#3a2a30;border-left:3px solid --accent;padding-left:10px;font-weight:700;">标题文字</h3>
 ```
 
 `--accent` 替换为文章类型对应的主色。
@@ -110,7 +112,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 法条引用卡片
 
 ```html
-<section class="paper-highlight" style="margin:0 0 10px;padding:12px 14px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
   <p style="font-family:-apple-system,sans-serif;font-size:15px;color:#7a5a4a;line-height:1.8;margin:0;">
     <strong>《法条名称》第X条：</strong>法条原文中<strong>关键内容</strong>加粗标注。
   </p>
@@ -158,7 +160,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 行动收束短句（仅文末例外）
 
 ```html
-<section class="paper-highlight" style="margin:0 0 10px;padding:12px 14px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);text-align:center;">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);text-align:center;">
   <p style="font-family:-apple-system,sans-serif;font-size:15px;color:--accent;line-height:1.8;margin:0;font-weight:bold;">强调短句</p>
 </section>
 ```
@@ -168,7 +170,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 配图
 
 ```html
-<section style="margin-bottom:10px;">
+<section style="margin-bottom:8px;">
   <img data-src="图片URL/640?from=appmsg" style="display:block;width:100%;height:auto;border-radius:12px;">
 </section>
 ```
@@ -239,7 +241,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 段落
 
 - 每段 ≤ 3 句，超长必须拆分
-- 段落间 `margin:0 0 10px 0`（末段 `margin:0`）
+- 段落间 `margin:0 0 .45em 0`（末段 `margin:0`）
 - 复杂流程拆成编号步骤
 
 ### 加粗
