@@ -215,27 +215,43 @@ reviewer: layout-agent
 
 ## 文末固定模块（每篇必加，顺序不可变）
 
-### 1. 来源标注
+固定顺序：**延伸阅读 → 来源标注 → 免责声明 → 公众号名片**。延伸阅读属于正文内容的最后一段，必须位于来源标注之前；来源标注和免责声明均左对齐、不缩进。
+
+### 1. 延伸阅读区
+
+只读取 `03-历史文章/文章卡片` 中带 `published_url` 的真实已发布记录。按主题相关性选择，显示为可点击的 `《文章标题》`；无真实 URL、未发布文章或草稿箱地址不得进入延伸阅读。
 
 ```html
-<section style="padding:5px 10px;margin:5px 0;text-align:center;">
-  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+<section style="padding:12px 12px;margin:12px 0 4px;background-color:#faf8f3;border-radius:12px;border:1px solid #ebe0cc;text-align:left;">
+  <h3 style="font-family:-apple-system,sans-serif;font-size:15px;color:#8a7a5a;line-height:1.8;margin:0 0 6px 0;font-weight:bold;text-align:left;text-indent:0;">延伸阅读</h3>
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.9;margin:0;text-align:left;text-indent:0;">
+    <a href="published_url">《十级工伤赔偿明细，一次性讲清》</a><br>
+    <a href="published_url">《交通事故伤残鉴定需要准备哪些材料？》</a>
+  </p>
+</section>
+```
+
+### 2. 来源标注
+
+```html
+<section style="padding:5px 0;margin:5px 0;text-align:left;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;text-align:left;text-indent:0;">
     来源：本文梳理自《XXX法》、《XXX条例》及相关司法解释现行有效版本。内容仅供信息参考。
   </p>
 </section>
 ```
 
-### 2. 免责声明卡片
+### 3. 免责声明卡片
 
 ```html
-<section style="padding:10px 12px;margin:5px 0;background:rgba(120,100,70,.06);border-radius:8px;">
-  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+<section style="padding:10px 12px;margin:5px 0;background:rgba(120,100,70,.06);border-radius:8px;text-align:left;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;text-align:left;text-indent:0;">
     <strong>免责声明：</strong>本文仅供信息参考，不构成法律意见。每起XX情况不同，具体处理请以法律规定和实际情况为准。
   </p>
 </section>
 ```
 
-### 3. 公众号名片
+### 4. 公众号名片
 
 ```html
 <section style="margin:5px 0;">
@@ -244,20 +260,6 @@ reviewer: layout-agent
 ```
 
 `data-id` 是 `__biz` 值，`data-service_type` 订阅号为 `1`。
-
-### 4. 延伸阅读区
-
-只读取 `03-历史文章/文章卡片` 中带 `published_url` 的真实已发布记录。按主题相关性选择，显示为可点击的 `《文章标题》`；无真实 URL、未发布文章或草稿箱地址不得进入延伸阅读。
-
-```html
-<section style="padding:12px 12px;margin:12px 0 4px;background-color:#faf8f3;border-radius:12px;border:1px solid #ebe0cc;">
-  <h3 style="font-family:-apple-system,sans-serif;font-size:15px;color:#8a7a5a;line-height:1.8;margin:0 0 6px 0;font-weight:bold;">延伸阅读</h3>
-  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.9;margin:0;">
-    <a href="published_url">《十级工伤赔偿明细，一次性讲清》</a><br>
-    <a href="published_url">《交通事故伤残鉴定需要准备哪些材料？》</a>
-  </p>
-</section>
-```
 
 ## 排版规则
 
@@ -318,7 +320,8 @@ reviewer: layout-agent
 - 法条用了引用卡片格式（左边框）？
 - 配图位置标记正确？
 - 没有文首关注引导？
-- 文末固定模块齐全（来源+免责+名片）？
+- 文末固定模块是否按“延伸阅读 → 来源标注 → 免责声明 → 公众号名片”排列？
+- 来源标注和免责声明是否显式 `text-align:left;text-indent:0`？
 - 章节卡片使用已发布基准的白底、12px 圆角、细边和轻阴影？
 - 是否把短小相邻章节合并为主题组，没有一标题一张卡？
 - 短篇轻量科普是否控制在 2—3 张正文主卡片？
@@ -330,6 +333,7 @@ reviewer: layout-agent
 - 重点模块包含 `box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55)`？
 - 所有 `paper-highlight` 是否均无 `border-left`，竖线只出现在章节标题或独立警示卡？
 - `article-shell` 是否为四边 `padding:8px`，第一个内框顶部距离与左右一致？
+- 最终 `final.html` 和草稿回读中是否均已清除旧值 `padding:4px 8px 8px`？
 - 是否先完成写手—排版预审，且最新 `highlight-map` 为 `ready_for_visual`？
 - 写手是否完成 `writer-layout-readback-vN.md` 的整版复核？
 - 是否生成 `reviews/highlight-map-vN.md` 并记录采用、放弃和最终位置？

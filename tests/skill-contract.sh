@@ -58,6 +58,10 @@ grep -Fq '40—120 个汉字' "$skill_dir/SKILL.md"
 grep -Fq '不得只放一句口号' "$skill_dir/SKILL.md"
 grep -Fq '单纯法条摘录不自动成为重点' "$skill_dir/SKILL.md"
 grep -Fq '结论 + 影响/行动' "$skill_dir/SKILL.md"
+grep -Fq '延伸阅读 → 来源标注 → 免责声明 → 公众号名片' "$skill_dir/SKILL.md"
+grep -Fq 'padding:5px 0;margin:5px 0;text-align:left;' "$skill_dir/SKILL.md"
+grep -Fq 'text-align:left;text-indent:0' "$skill_dir/SKILL.md"
+! grep -Fq 'padding:4px 8px 8px' "$skill_dir/SKILL.md"
 ! grep -Fq '不加整篇内框' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
