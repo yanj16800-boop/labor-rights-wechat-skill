@@ -1,8 +1,6 @@
 ---
 name: labor-rights-wechat-layout
-description: |
-  法律维权公众号手机端排版。输入已审核正文，输出完整 HTML。
-  触发词：公众号排版、排版规范、卡片风、排版自检、排版微调、排一下、做排版、生成HTML
+description: Use when 已审核的法律公众号正文需要手机端排版、排版自检、生成 HTML 或修复草稿箱与 Obsidian 预览样式不一致
 ---
 
 # 法律公众号排版
@@ -29,20 +27,81 @@ description: |
 
 ## 样式配方（生产级 CSS）
 
-### 外层宣纸纹容器（每篇文章唯一）
+### 全文外层（整篇外框，不用宣纸）
+
+整篇文章必须使用一个全文外框。外框使用白底、细实线边框，并在框内侧形成宽度固定为 `1.5mm` 的向内渐变灰边；不能把这条内渐变灰边拆散到各章节卡片，也不能用普通外阴影代替。
 
 ```html
-<section class="paper-bg" style="padding:10px 8px;background-color:#f5f0e6;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 8px,rgba(180,160,130,0.02) 8px,rgba(180,160,130,0.02) 10px),repeating-linear-gradient(45deg,transparent 0,transparent 12px,rgba(180,160,130,0.015) 12px,rgba(180,160,130,0.015) 14px);">
+<section class="article-shell" style="width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;font-size:16px;line-height:1.85;color:#4a3f30;letter-spacing:.3px;word-break:break-word;overflow-wrap:anywhere;padding:8px;border:1px solid #d8d2c8;border-radius:12px;box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45);background:#fff;">
   <!-- 所有内容放在这个 section 内 -->
 </section>
 ```
 
-用纯 CSS `repeating-linear-gradient` 模拟宣纸纹理，不依赖外部图片。
+全文外框只承担整体收束和内渐变灰边，不铺宣纸。宣纸仍只用于下述重点模块。Obsidian 预览和公众号草稿必须读取包含该 `article-shell` 的同一份 `final.html`。
 
-### 卡片容器（章节主卡片）
+全文外框四边内距统一为 `8px`，确保第一个内框顶部距离与左右距离一致；不得再为顶部单独使用 `4px`。
+
+公众号主标题由草稿的 `title` 字段承载，正文不得重复输出主标题或 `<h1>`。Obsidian 预览应在正文外单独展示标题元数据，不能把标题写入 `article-shell`。
+
+### 重点宣纸模块
+
+只用于关键法条、核心结论、关键步骤或避坑提醒。普通正文、整篇外层和每个章节都不得铺宣纸。
+
+所有 `paper-highlight` 一律不使用左侧粗线。宣纸的识别只依靠真实纹理、圆角和 `0.15mm` 向内灰边；章节标题的 `3px` 竖线和警示卡的独立竖线不属于宣纸。法条使用宣纸时同样不得加 `border-left`。
+
+### 写手—排版协作预审
+
+排版 Agent 在配图前先读取 `article.md`、`visual-brief.md`、内容审核和法律审核，核对写手标注的精确原文位置、候选文字、读者问题、实际影响和信息结构。排版不得脱离候选表临时猜重点，也不得用视觉模块掩盖正文重复或核心答案缺失。
+
+预审写入最新版 `reviews/highlight-map-vN.md`，Frontmatter 至少包含：
+
+```yaml
+review_type: highlight_map
+version: N
+input_sha256: "当前 article.md 的 SHA-256"
+decision: ready_for_visual | revise_writer
+reviewed_at: "ISO 8601 时间"
+reviewer: layout-agent
+```
+
+正文包含逐项采用或放弃理由、锁定形式、精确原文位置和最终落位。候选不重要、彼此重复、缺少文章核心答案、信息图文案无法独立读懂或整版节奏明显失衡时，返回 `revise_writer` 并退回写手；排版 Agent 不得代写正文。只有 `ready_for_visual` 才交配图 Agent。
+
+完成排版后，写手必须读取同一 `final.html` 的 375px、414px 预览并写入 `reviews/writer-layout-readback-vN.md`，确认重点层次、整版内容质量和图文关系；不通过时退回对应环节。
+
+排版前读取 `visual-brief.md` 和两轮审核结论，从四类候选中取舍：**核心结论、规则依据、误区提醒、行动步骤**。每个候选必须标注类型、原文范围、读者价值和落位位置。评分：直接影响判断或行动 `+3`，核心规则 `+2`，常见误区 `+2`，可独立读懂 `+1`；重复相邻文字 `-3`，与图片重复 `-3`，超过120个汉字 `-2`。分数用于比较，不机械决定数量；通常保留 2—4 处，存在三个以上不同类型的重点时，不得只使用一次宣纸。
+
+宣纸承载一个完整重点语义块，不是被截出来的一句话。单纯法条摘录不自动成为重点；必须与大白话结论或实际影响组合。每个模块应包含“结论 + 影响/行动”，可以使用两段短文或 2—4 个短项，建议为 40—120 个汉字，不得只放一句口号。内容审核核对重点是否真正重要，法律审核核对是否改变法律原意，排版只负责落位，不重新创造重点。
+
+步骤、比较、材料清单和条件组合优先短文字信息图；核心规则、关键结论、关键误区和行动收束优先宣纸；其他内容保持正文或普通配图。开头两段原则上不放宣纸，同一主题主卡片通常不超过一处，宣纸不得与信息图重复，不得连续出现两个宣纸模块。宣纸只能提炼已审核内容，不得新增事实、法条或结论。
+
+宣纸重点原则上嵌入对应主卡片内部，紧跟相关标题、法条或解释，形成“规则/结论 → 大白话解释”的连续阅读单元。不得制作独立的口号式宣纸横幅，也不得用脱离上下文的一句话把两张主卡片隔开。仅在全文末尾的行动收束或独立风险警示确有必要时，允许单独使用一次宣纸模块。
+
+排版终审更新同版本重点落位并记录原文位置、分数、表现形式、采用或放弃理由、最终位置。用同一份 `final.html` 检查 Obsidian `375px`、`414px` 预览及微信草稿回读；任何一端出现素材被清洗、重点错位、重复或过密，均退回排版修正。
+
+固定素材：`assets/xuan-paper.png` 是原始母版；`assets/xuan-paper-wechat.jpg` 是低于微信 2MB 限制的上传版。
+
+当前公众号已验证的微信 CDN URL：
+
+`https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg`
+
+直接复用该地址及以下写法。`/640?from=appmsg`、`background` 简写、`background-size:cover` 和 `background-blend-mode:multiply` 均来自已发布文章《十级工伤赔偿明细，一次性讲清》的可用排版，不改成全篇背景。
 
 ```html
-<section style="padding:14px 12px;margin-bottom:10px;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-radius:12px;border:1px solid #ebe0cc;box-shadow:0 1px 4px rgba(120,100,70,.08);">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
+  重点内容
+</section>
+```
+
+`box-shadow` 是重点模块四边向内渐隐的灰色内边，宽度固定 `0.15mm`；不得改成外阴影。Obsidian 预览和公众号草稿必须读取同一份 `final.html`。
+
+### 卡片容器（主题组主卡片）
+
+卡片按“完整阅读单元”组织，不按标题机械切分。一张主卡片可以容纳 2—3 个相互关联的短章节；不得见到章节标题就新开一张卡片。短篇轻量科普通常只使用 2—3 张正文主卡片，图片和文末固定模块不计入；较长文章才按信息量增加卡片。
+
+单独一张主卡片原则上应至少包含两个实质段落，或一个标题加一个完整的重点/清单模块。只有需要单独停留的核心结论才能例外。相邻内容能自然连续阅读时，优先放在同一卡片内，用标题和紧凑段间距区分。
+
+```html
+<section style="margin:0 0 8px;padding:12px 14px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(120,100,70,.08);border:1px solid #ebe0cc;">
   <!-- 卡片内容 -->
 </section>
 ```
@@ -50,15 +109,17 @@ description: |
 ### 正文段落
 
 ```html
-<p style="font-family:-apple-system,sans-serif;font-size:15px;color:#4a3f30;line-height:1.8;text-align:justify;margin:0 0 0.6em 0;">段落文字</p>
+<p style="font-family:-apple-system,sans-serif;font-size:16px;color:#4a3f30;line-height:1.85;text-align:left;text-indent:2em;margin:0 0 .45em 0;">段落文字</p>
 ```
 
 末段用 `margin:0` 避免底部多余间距。
 
+普通叙事、解释和案情段落左对齐并首行缩进两字。标题、列表、表格、宣纸重点和图片说明不缩进；这些元素显式使用 `text-indent:0`。不使用 `text-align:justify`，避免手机端字间距被机械拉伸。
+
 ### 纯文字区（不需卡片包裹的过渡段）
 
 ```html
-<section style="margin-bottom:10px;">
+<section style="margin-bottom:8px;">
   <p style="...(同上)">文字</p>
 </section>
 ```
@@ -66,16 +127,16 @@ description: |
 ### 章节标题
 
 ```html
-<h3 style="font-family:-apple-system,sans-serif;font-size:17px;color:--accent;line-height:1.8;margin:0 0 4px 0;font-weight:bold;">标题文字</h3>
+<h3 style="font-family:-apple-system,sans-serif;margin:0 0 6px;font-size:18px;color:#3a2a30;border-left:3px solid --accent;padding-left:10px;font-weight:700;">标题文字</h3>
 ```
 
 `--accent` 替换为文章类型对应的主色。
 
-### 法条引用卡片
+### 法条引用卡片（宣纸，无左竖线）
 
 ```html
-<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-left:4px solid --accent;border-radius:0 8px 8px 0;">
-  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.8;margin:0;">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);font-size:15px;line-height:1.8;color:#7a5a4a;">
+  <p style="font-family:-apple-system,sans-serif;font-size:15px;color:#7a5a4a;line-height:1.8;margin:0;">
     <strong>《法条名称》第X条：</strong>法条原文中<strong>关键内容</strong>加粗标注。
   </p>
 </section>
@@ -102,7 +163,7 @@ description: |
 ### 警示提示卡片（橙黄色左边框）
 
 ```html
-<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border-left:4px solid #e8943a;border-radius:0 8px 8px 0;">
+<section style="padding:14px 16px;margin:0 0 14px;background:#fff5e6;border-left:4px solid #e8943a;border-radius:8px;">
   <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#7a5a1b;line-height:1.8;margin:0;">
     ⚠️ 警示内容...
   </p>
@@ -112,25 +173,27 @@ description: |
 ### 知识提示卡片（绿色左边框）
 
 ```html
-<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border-left:4px solid #18a96f;border-radius:0 8px 8px 0;">
+<section style="padding:14px 16px;margin:0 0 14px;background:#eef8f3;border-left:4px solid #18a96f;border-radius:8px;">
   <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#3a5a28;line-height:1.8;margin:0;">
     💡 提示内容...
   </p>
 </section>
 ```
 
-### 居中强调短句
+### 行动收束短句（仅文末例外）
 
 ```html
-<section style="padding:14px 12px;margin-bottom:10px;background-color:#faf8f3;background-image:...(宣纸纹);border-radius:12px;border:1px solid #ebe0cc;text-align:center;">
+<section class="paper-highlight" style="margin:0 0 8px;padding:10px 12px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);text-align:center;">
   <p style="font-family:-apple-system,sans-serif;font-size:15px;color:--accent;line-height:1.8;margin:0;font-weight:bold;">强调短句</p>
 </section>
 ```
 
+此样式不得出现在开头或普通章节之间，不得作为“两条线可以并行”一类口号横幅。
+
 ### 配图
 
 ```html
-<section style="margin-bottom:10px;">
+<section style="margin-bottom:8px;">
   <img data-src="图片URL/640?from=appmsg" style="display:block;width:100%;height:auto;border-radius:12px;">
 </section>
 ```
@@ -140,7 +203,7 @@ description: |
 ### 步骤列表（流程排版）
 
 ```html
-<section style="padding:12px 16px;margin:12px 0;background-color:#faf8f3;background-image:...(宣纸纹);border:1px solid #ebe0cc;border-radius:8px;">
+<section style="padding:12px 16px;margin:12px 0;background:#fff;border:1px solid #ebe0cc;border-radius:8px;">
   <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.8;margin:0;">
     ✓ 步骤一<br>
     <span style="font-family:-apple-system,sans-serif;color:#888;font-size:13px;">补充说明</span><br>
@@ -152,27 +215,43 @@ description: |
 
 ## 文末固定模块（每篇必加，顺序不可变）
 
-### 1. 来源标注
+固定顺序：**延伸阅读 → 来源标注 → 免责声明 → 公众号名片**。延伸阅读属于正文内容的最后一段，必须位于来源标注之前；来源标注和免责声明均左对齐、不缩进。
+
+### 1. 延伸阅读区
+
+只读取 `03-历史文章/文章卡片` 中带 `published_url` 的真实已发布记录。按主题相关性选择，显示为可点击的 `《文章标题》`；无真实 URL、未发布文章或草稿箱地址不得进入延伸阅读。
 
 ```html
-<section style="padding:5px 10px;margin:5px 0;text-align:center;">
-  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+<section style="padding:12px 12px;margin:12px 0 4px;background-color:#faf8f3;border-radius:12px;border:1px solid #ebe0cc;text-align:left;">
+  <h3 style="font-family:-apple-system,sans-serif;font-size:15px;color:#8a7a5a;line-height:1.8;margin:0 0 6px 0;font-weight:bold;text-align:left;text-indent:0;">延伸阅读</h3>
+  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.9;margin:0;text-align:left;text-indent:0;">
+    <a href="published_url">《十级工伤赔偿明细，一次性讲清》</a><br>
+    <a href="published_url">《交通事故伤残鉴定需要准备哪些材料？》</a>
+  </p>
+</section>
+```
+
+### 2. 来源标注
+
+```html
+<section style="padding:5px 0;margin:5px 0;text-align:left;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;text-align:left;text-indent:0;">
     来源：本文梳理自《XXX法》、《XXX条例》及相关司法解释现行有效版本。内容仅供信息参考。
   </p>
 </section>
 ```
 
-### 2. 免责声明卡片
+### 3. 免责声明卡片
 
 ```html
-<section style="padding:10px 12px;margin:5px 0;background-color:#faf8f3;background-image:repeating-linear-gradient(135deg,transparent 0,transparent 3px,rgba(180,160,130,0.025) 3px,rgba(180,160,130,0.025) 4px),repeating-linear-gradient(45deg,transparent 0,transparent 5px,rgba(180,160,130,0.018) 5px,rgba(180,160,130,0.018) 6px);border-radius:12px;border:1px solid #ebe0cc;">
-  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;">
+<section style="padding:10px 12px;margin:5px 0;background:rgba(120,100,70,.06);border-radius:8px;text-align:left;">
+  <p style="font-family:-apple-system,sans-serif;font-size:13px;color:#999;line-height:1.8;margin:0;text-align:left;text-indent:0;">
     <strong>免责声明：</strong>本文仅供信息参考，不构成法律意见。每起XX情况不同，具体处理请以法律规定和实际情况为准。
   </p>
 </section>
 ```
 
-### 3. 公众号名片
+### 4. 公众号名片
 
 ```html
 <section style="margin:5px 0;">
@@ -182,35 +261,12 @@ description: |
 
 `data-id` 是 `__biz` 值，`data-service_type` 订阅号为 `1`。
 
-### 4. 延伸阅读区（草稿阶段就写，数量不限）
-
-**规则（2026-08-02 修订）：**
-
-- **草稿阶段就写延伸阅读**，不用等发布
-- **数量不限**：有相关的就加，无硬性上限
-- **关联判定（放宽）**：同领域 / 同系列 / 同法条 / 同赔偿项目 / 同人群 / 互相补充说明，沾边即加
-- **草稿格式**（无有效 URL，纯文字标题列表）：
-
-```html
-<section style="padding:12px 12px;margin:12px 0 4px;background-color:#faf8f3;border-radius:12px;border:1px solid #ebe0cc;">
-  <h3 style="font-family:-apple-system,sans-serif;font-size:15px;color:#8a7a5a;line-height:1.8;margin:0 0 6px 0;font-weight:bold;">延伸阅读</h3>
-  <p style="font-family:-apple-system,sans-serif;font-size:14px;color:#4a3f30;line-height:1.9;margin:0;">
-    《高温中暑算不算工伤？实操指南》<br>
-    《十级工伤赔偿明细，一次性讲清》<br>
-    《公司给少缴了工伤保险，差额谁补？》
-  </p>
-</section>
-```
-
-- **发布后格式**（补 URL，手动在微信编辑器加超链接）：`<a href="已发布文章链接">文章标题</a>`，一行一条
-- 同系列未发布篇也可列入（标注「待发布」），发布顺序上优先发被引用篇
-
 ## 排版规则
 
 ### 段落
 
 - 每段 ≤ 3 句，超长必须拆分
-- 段落间 `margin:0 0 0.6em 0`（末段 `margin:0`）
+- 段落间 `margin:0 0 .45em 0`（末段 `margin:0`）
 - 复杂流程拆成编号步骤
 
 ### 加粗
@@ -229,9 +285,15 @@ description: |
 
 同一篇不混用编号格式。
 
+可枚举的赔偿项目、办理步骤或判断要件优先使用 `01/02/03` 加简短标题；不得把一整句解释写成章节标题。叙事型、案例型文章不强制编号。
+
+### 结尾收束
+
+数据密集文章结尾必须使用表格或信息卡集中收束，便于读者一眼对比“项目、标准、责任主体或下一步”。非数据型文章可用 3—5 项行动清单收束，不为了套模板强行加表格。
+
 ### 法条引用
 
-- 法条原文用引用卡片（左边框4px solid --accent）
+- 法条原文可用宣纸引用卡片，但不得增加左侧粗线；章节标题负责提供视觉锚点
 - 法规名用《》，精确到条、款、项
 - 关键内容加粗，后跟大白话解读
 - 不连续堆砌 3 条以上
@@ -249,12 +311,31 @@ description: |
 ## 排版自检清单
 
 - 每段 ≤ 3 句？
+- 正文是否没有重复主标题或 `<h1>`？
+- 普通段落是否左对齐并缩进两字，列表等特殊元素是否不缩进？
+- 全文是否只有一个 `article-shell` 外框，并包含 `box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45)`？
+- `article-shell` 是否包含 `width:100%;max-width:100%;box-sizing:border-box;overflow:hidden`，并在 375px、414px 均无横向溢出？
 - 加粗只用在标题/结论/判决要点？
 - 编号格式统一？
 - 法条用了引用卡片格式（左边框）？
 - 配图位置标记正确？
 - 没有文首关注引导？
-- 文末固定模块齐全（来源+免责+名片）？
-- 卡片间距均匀（`margin-bottom:10px`）？
-- 宣纸纹背景生效？
+- 文末固定模块是否按“延伸阅读 → 来源标注 → 免责声明 → 公众号名片”排列？
+- 来源标注和免责声明是否显式 `text-align:left;text-indent:0`？
+- 章节卡片使用已发布基准的白底、12px 圆角、细边和轻阴影？
+- 是否把短小相邻章节合并为主题组，没有一标题一张卡？
+- 短篇轻量科普是否控制在 2—3 张正文主卡片？
+- 宣纸只用于重点模块，没有铺满全文或每个章节？
+- 宣纸是否优先嵌入相关主卡片，没有口号式独立横幅？
+- 是否先识别核心结论、规则依据、误区提醒、行动步骤，并按实际存在的类型覆盖重点？
+- 存在三个以上不同类型重点时，宣纸是否不止使用一次？
+- 重点模块使用 `/640?from=appmsg` 的真实宣纸地址和 `background-blend-mode:multiply`？
+- 重点模块包含 `box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55)`？
+- 所有 `paper-highlight` 是否均无 `border-left`，竖线只出现在章节标题或独立警示卡？
+- `article-shell` 是否为四边 `padding:8px`，第一个内框顶部距离与左右一致？
+- 最终 `final.html` 和草稿回读中是否均已清除旧值 `padding:4px 8px 8px`？
+- 是否先完成写手—排版预审，且最新 `highlight-map` 为 `ready_for_visual`？
+- 写手是否完成 `writer-layout-readback-vN.md` 的整版复核？
+- 是否生成 `reviews/highlight-map-vN.md` 并记录采用、放弃和最终位置？
+- 是否完成同一 `final.html` 的 375px、414px 预览和微信草稿回读？
 - `--accent` 主色与文章类型匹配？
