@@ -39,13 +39,17 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 全文外框只承担整体收束和内渐变灰边，不铺宣纸。宣纸仍只用于下述重点模块。Obsidian 预览和公众号草稿必须读取包含该 `article-shell` 的同一份 `final.html`。
 
+公众号主标题由草稿的 `title` 字段承载，正文不得重复输出主标题或 `<h1>`。Obsidian 预览应在正文外单独展示标题元数据，不能把标题写入 `article-shell`。
+
 ### 重点宣纸模块
 
 只用于关键法条、核心结论、关键步骤或避坑提醒。普通正文、整篇外层和每个章节都不得铺宣纸。
 
 排版前读取 `visual-brief.md` 和两轮审核结论，从四类候选中取舍：**核心结论、规则依据、误区提醒、行动步骤**。评分：直接影响判断或行动 `+3`，核心规则 `+2`，常见误区 `+2`，可独立读懂 `+1`；重复相邻文字 `-3`，与图片重复 `-3`，超过90个汉字 `-2`。分数用于比较，不机械决定数量；通常保留 2—4 处，存在三个以上不同类型的重点时，不得只使用一次宣纸。
 
-步骤、比较、材料清单和条件组合优先短文字信息图；一句核心判断、关键误区和行动收束优先宣纸；其他内容保持正文或普通配图。开头两段原则上不放宣纸，同一主题主卡片通常不超过一处，宣纸不得与信息图重复，不得连续出现两个宣纸模块。宣纸只能提炼已审核内容，不得新增事实、法条或结论。
+步骤、比较、材料清单和条件组合优先短文字信息图；核心规则、关键结论、关键误区和行动收束优先宣纸；其他内容保持正文或普通配图。开头两段原则上不放宣纸，同一主题主卡片通常不超过一处，宣纸不得与信息图重复，不得连续出现两个宣纸模块。宣纸只能提炼已审核内容，不得新增事实、法条或结论。
+
+宣纸重点原则上嵌入对应主卡片内部，紧跟相关标题、法条或解释，形成“规则/结论 → 大白话解释”的连续阅读单元。不得制作独立的口号式宣纸横幅，也不得用脱离上下文的一句话把两张主卡片隔开。仅在全文末尾的行动收束或独立风险警示确有必要时，允许单独使用一次宣纸模块。
 
 排版终审写入 `reviews/highlight-map-vN.md`，逐项记录原文位置、分数、表现形式、采用或放弃理由、最终位置。用同一份 `final.html` 检查 Obsidian `375px`、`414px` 预览及微信草稿回读；任何一端出现素材被清洗、重点错位、重复或过密，均退回排版修正。
 
@@ -80,10 +84,12 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ### 正文段落
 
 ```html
-<p style="font-family:-apple-system,sans-serif;font-size:16px;color:#4a3f30;line-height:1.85;text-align:justify;margin:0 0 10px 0;">段落文字</p>
+<p style="font-family:-apple-system,sans-serif;font-size:16px;color:#4a3f30;line-height:1.85;text-align:left;text-indent:2em;margin:0 0 10px 0;">段落文字</p>
 ```
 
 末段用 `margin:0` 避免底部多余间距。
+
+普通叙事、解释和案情段落左对齐并首行缩进两字。标题、列表、表格、宣纸重点和图片说明不缩进；这些元素显式使用 `text-indent:0`。不使用 `text-align:justify`，避免手机端字间距被机械拉伸。
 
 ### 纯文字区（不需卡片包裹的过渡段）
 
@@ -149,13 +155,15 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 </section>
 ```
 
-### 居中强调短句
+### 行动收束短句（仅文末例外）
 
 ```html
 <section class="paper-highlight" style="margin:0 0 10px;padding:12px 14px;background:#faf6ed url(&quot;https://mmbiz.qpic.cn/sz_mmbiz_jpg/ysL2dia5FLeACuHdLYEZaCEQAxD9eBuJjZFcB8UibeiblwTYCuo89KR7seEB55q6wsib0OYHnpoHjGvrGmZwYWhnZ56U5Eq9Ez73wqU87pMDTqQ/640?from=appmsg&quot;);background-size:cover;background-blend-mode:multiply;border-radius:8px;box-shadow:inset 0 0 0.15mm rgba(88,88,88,.55);text-align:center;">
   <p style="font-family:-apple-system,sans-serif;font-size:15px;color:--accent;line-height:1.8;margin:0;font-weight:bold;">强调短句</p>
 </section>
 ```
+
+此样式不得出现在开头或普通章节之间，不得作为“两条线可以并行”一类口号横幅。
 
 ### 配图
 
@@ -250,6 +258,12 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 
 同一篇不混用编号格式。
 
+可枚举的赔偿项目、办理步骤或判断要件优先使用 `01/02/03` 加简短标题；不得把一整句解释写成章节标题。叙事型、案例型文章不强制编号。
+
+### 结尾收束
+
+数据密集文章结尾必须使用表格或信息卡集中收束，便于读者一眼对比“项目、标准、责任主体或下一步”。非数据型文章可用 3—5 项行动清单收束，不为了套模板强行加表格。
+
 ### 法条引用
 
 - 法条原文用引用卡片（左边框4px solid --accent）
@@ -270,6 +284,8 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 ## 排版自检清单
 
 - 每段 ≤ 3 句？
+- 正文是否没有重复主标题或 `<h1>`？
+- 普通段落是否左对齐并缩进两字，列表等特殊元素是否不缩进？
 - 全文是否只有一个 `article-shell` 外框，并包含 `box-shadow:inset 0 0 1.5mm rgba(88,88,88,.45)`？
 - `article-shell` 是否包含 `width:100%;max-width:100%;box-sizing:border-box;overflow:hidden`，并在 375px、414px 均无横向溢出？
 - 加粗只用在标题/结论/判决要点？
@@ -282,6 +298,7 @@ description: Use when 已审核的法律公众号正文需要手机端排版、�
 - 是否把短小相邻章节合并为主题组，没有一标题一张卡？
 - 短篇轻量科普是否控制在 2—3 张正文主卡片？
 - 宣纸只用于重点模块，没有铺满全文或每个章节？
+- 宣纸是否优先嵌入相关主卡片，没有口号式独立横幅？
 - 是否先识别核心结论、规则依据、误区提醒、行动步骤，并按实际存在的类型覆盖重点？
 - 存在三个以上不同类型重点时，宣纸是否不止使用一次？
 - 重点模块使用 `/640?from=appmsg` 的真实宣纸地址和 `background-blend-mode:multiply`？

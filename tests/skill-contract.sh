@@ -38,6 +38,13 @@ grep -Fq 'published_url' "$skill_dir/SKILL.md"
 grep -Fq '可点击的 `《文章标题》`' "$skill_dir/SKILL.md"
 grep -Fq 'width:100%;max-width:100%;box-sizing:border-box;overflow:hidden' "$skill_dir/SKILL.md"
 grep -Fq '横向溢出' "$skill_dir/SKILL.md"
+grep -Fq '正文不得重复输出主标题或 `<h1>`' "$skill_dir/SKILL.md"
+grep -Fq '宣纸重点原则上嵌入对应主卡片内部' "$skill_dir/SKILL.md"
+grep -Fq '不得制作独立的口号式宣纸横幅' "$skill_dir/SKILL.md"
+grep -Fq 'text-align:left;text-indent:2em' "$skill_dir/SKILL.md"
+grep -Fq '标题、列表、表格、宣纸重点和图片说明不缩进' "$skill_dir/SKILL.md"
+grep -Fq '可枚举的赔偿项目、办理步骤或判断要件优先使用 `01/02/03`' "$skill_dir/SKILL.md"
+grep -Fq '数据密集文章结尾必须使用表格或信息卡集中收束' "$skill_dir/SKILL.md"
 ! grep -Fq '不加整篇内框' "$skill_dir/SKILL.md"
 
 echo 'skill contract: pass'
