@@ -69,7 +69,7 @@
 - 阴影：`box-shadow:0 1px 4px rgba(120,100,70,.08)`
 - 正文字色：`#4a3f30`
 
-卡片可按内容使用宣纸纹理或纯米白背景；纹理必须轻，不得影响文字清晰度。
+卡片统一使用纯白背景 `#fff`（无宣纸纹理、无米黄底），细边框 `#ebe0cc` + 浅阴影。参考黄金标准《十级工伤赔偿明细》排版。
 
 ### 图片
 
@@ -80,14 +80,12 @@
 
 ## 文末模块
 
-顺序按实际可用内容装配：
+顺序固定不可变：**延伸阅读 → 来源标注 → 免责声明 → 公众号名片**（用户2026-08-03确认规范）。若文章无延伸阅读，则顺序为 来源标注 → 免责声明 → 公众号名片。
 
-1. 正文收尾或提示卡片；
-2. 来源与图文说明；
-3. 免责声明；
-4. 延伸阅读：只使用已有公开链接；
-5. 小程序入口；
-6. 公众号名片。当前账号使用以下完整组件：
+1. 延伸阅读（可选，有则放最前）：只使用已有公开链接，格式 `<a href="已发布文章链接">《标题》</a>` 一行一条；
+2. 来源标注（纯文字小字，无背景无卡片，13px 灰字 #607d8b，text-align:left）；
+3. 免责声明（同来源，纯文字小字，无背景无卡片）；
+4. 公众号名片。当前账号使用以下完整组件：
 
 ```html
 <section class="mp_profile_iframe_wrp"><mp-common-profile class="custom_select_card mp_profile_iframe mp_common_widget" data-pluginname="mp-common-profile" data-from="0" data-id="MzcwNDM1NjIxOQ==" data-headimg="https://mmbiz.qpic.cn/mmbiz_png/ysL2dia5FLeDou6Xic7kv7JW65sibMNIpIPrWtDnj3gvT1Hhf8UVUmUVNo0KDXM7j4a2EQ92LBSAHA3l17qFsW01qwdeeibbmpccUwsDYSt4kOs/0?wx_fmt=png" data-nickname="云贸星捷人伤赔偿小知识" data-signature="交通事故·工伤赔偿科普｜企业法律咨询（非律师）｜讲标准、流程、证据｜内容仅供参考，不构成法律意见。" data-service_type="1"></mp-common-profile></section>
